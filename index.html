@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>한번에 배우는 영어 프랑스어</title>
+<style>
+  @font-face {
+    font-family: 'GmarketSansLight';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-display: swap;
+  }
+  * { box-sizing:border-box; margin:0; -webkit-tap-highlight-color:transparent; }
+  body {
+    min-height:100vh; color:#1c1c2e;
+    font-family:'가는각진제목체','Pretendard','Malgun Gothic',sans-serif;
+    background:linear-gradient(180deg,#cfe8ff 0%, #e8f4ff 45%, #f6fbff 100%);
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22340%22%20height%3D%22220%22%3E%3Cg%20fill%3D%22rgba%28255%2C255%2C255%2C0.75%29%22%3E%3Cellipse%20cx%3D%2270%22%20cy%3D%2260%22%20rx%3D%2246%22%20ry%3D%2222%22/%3E%3Cellipse%20cx%3D%22105%22%20cy%3D%2248%22%20rx%3D%2234%22%20ry%3D%2218%22/%3E%3Cellipse%20cx%3D%22240%22%20cy%3D%22150%22%20rx%3D%2256%22%20ry%3D%2224%22/%3E%3Cellipse%20cx%3D%22280%22%20cy%3D%22138%22%20rx%3D%2236%22%20ry%3D%2218%22/%3E%3C/g%3E%3C/svg%3E"), linear-gradient(180deg,#cfe8ff 0%, #e8f4ff 45%, #f6fbff 100%);
+    background-repeat:repeat, no-repeat; background-size:340px 220px, cover;
+    background-attachment:fixed;
+    padding:max(20px, env(safe-area-inset-top)) 18px 70px;
+    max-width:480px; margin:0 auto;
+  }
+  header { text-align:center; margin:14px 0 24px; }
+  .logo {
+    display:inline-block; font-family:'가는각진제목체','GmarketSansMedium',sans-serif;
+    font-size:26px; font-weight:800; letter-spacing:-.5px;
+    background:linear-gradient(90deg,#2a7fd4,#7c5bd8);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .logoEn { margin-top:6px; font-size:14px; font-weight:700; color:#3a7fc4; letter-spacing:.3px; }
+  .logoFr { margin-top:3px; font-size:13px; font-weight:700; color:#7a68c8; letter-spacing:.3px; font-style:italic; }
+  .sub { color:#7a7a96; font-size:13px; margin-top:8px; letter-spacing:.2px; }
+  .searchBox {
+    position:relative; margin-bottom:14px;
+    border-radius:22px; background:rgba(255,255,255,.8);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 28px rgba(90,80,200,.14), inset 0 0 0 1px rgba(255,255,255,.7);
+  }
+  textarea {
+    width:100%; background:transparent; border:none; color:#1c1c2e;
+    font-size:17px; padding:18px 64px 18px 20px; resize:none; height:64px;
+    font-family:inherit; border-radius:22px;
+  }
+  textarea::placeholder { color:#a5a5c0; }
+  textarea:focus { outline:none; }
+  .goBtn {
+    position:absolute; right:9px; top:9px; width:46px; height:46px;
+    background:linear-gradient(135deg,#3a9be8,#7c6cff); border:none; border-radius:16px;
+    color:#fff; font-size:19px; cursor:pointer;
+    box-shadow:0 5px 14px rgba(108,91,255,.4);
+    transition:transform .15s;
+  }
+  .goBtn:active { transform:scale(.92); }
+  .goBtn:disabled { opacity:.6; }
+  .examples { display:flex; gap:7px; flex-wrap:wrap; justify-content:center; margin-bottom:18px; }
+  .examples button {
+    background:rgba(255,255,255,.65); border:none; color:#67678a; border-radius:18px;
+    font-size:12.5px; padding:8px 13px; cursor:pointer; font-family:inherit;
+    box-shadow:0 2px 8px rgba(90,80,200,.08);
+  }
+  .status { color:#8c8caa; font-size:12px; min-height:16px; margin-bottom:8px; text-align:center; }
+  .block {
+    border-radius:24px; padding:18px 20px 16px; margin-bottom:13px;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 10px 30px rgba(90,80,200,.10), inset 0 0 0 1px rgba(255,255,255,.7);
+    animation:rise .45s cubic-bezier(.2,.8,.3,1) both;
+  }
+  #result .block:nth-child(2){ animation-delay:.08s } #result .block:nth-child(3){ animation-delay:.16s }
+  @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  .langTag { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .flagDot {
+    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:15px; background:#eef; box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);
+  }
+  .bko .flagDot { background:#f2f2f8; } .ben .flagDot { background:#e8edff; } .bfr .flagDot { background:#e5f6ee; }
+  .langName { font-size:12px; font-weight:700; letter-spacing:1.5px; color:#9797b4; }
+  .mainLine { display:flex; align-items:center; gap:12px; }
+  .sentence { flex:1; font-family:'가는각진제목체','GmarketSansMedium',sans-serif; font-size:21px; font-weight:700; line-height:1.45; letter-spacing:-.3px; }
+  .ben .sentence { color:#4a3ee8; } .bfr .sentence { color:#0b9865; }
+  .pron {
+    margin-top:10px; font-size:15px; color:#a06a12;
+    background:linear-gradient(90deg,rgba(255,205,100,.18),transparent 80%);
+    border-left:3px solid #f4b942; border-radius:4px; padding:6px 10px;
+  }
+  .speak {
+    width:46px; height:46px; border:none; border-radius:50%; cursor:pointer; flex-shrink:0;
+    color:#fff; font-size:17px; background:linear-gradient(135deg,#6c5bff,#b84fd8);
+    box-shadow:0 5px 14px rgba(108,91,255,.35); transition:transform .15s;
+  }
+  .bfr .speak { background:linear-gradient(135deg,#0db977,#0a8fbf); box-shadow:0 5px 14px rgba(13,185,119,.35); }
+  .bko .speak { background:linear-gradient(135deg,#5a5a78,#8a8aa8); box-shadow:0 5px 14px rgba(90,90,120,.3); }
+  .speak:active { transform:scale(.9); }
+  /* 재생 중 이퀄라이저 */
+  .eq { display:none; align-items:flex-end; gap:3px; height:18px; margin-left:2px; }
+  .block.playing .eq { display:inline-flex; }
+  .eq i { width:3.5px; background:currentColor; border-radius:2px; animation:eq 0.8s ease-in-out infinite; }
+  .eq i:nth-child(1){height:40%; animation-delay:0s} .eq i:nth-child(2){height:90%; animation-delay:.15s}
+  .eq i:nth-child(3){height:60%; animation-delay:.3s} .eq i:nth-child(4){height:100%; animation-delay:.45s}
+  .eq i:nth-child(5){height:50%; animation-delay:.6s}
+  @keyframes eq { 0%,100%{transform:scaleY(.4)} 50%{transform:scaleY(1)} }
+  .ben .eq { color:#4a3ee8; } .bfr .eq { color:#0b9865; } .bko .eq { color:#6a6a88; }
+
+  /* 마스코트: 파를레 */
+  .mascot {
+    position:fixed; left:10px; bottom:8px; z-index:50; width:96px; pointer-events:none;
+  }
+  .mascot svg { width:96px; height:96px; animation:float 3.2s ease-in-out infinite; filter:drop-shadow(0 6px 10px rgba(60,50,140,.25)); }
+  @keyframes float { 0%,100%{ transform:translateY(0) rotate(-2deg);} 50%{ transform:translateY(-8px) rotate(2deg);} }
+  .bubble {
+    position:absolute; left:74px; bottom:70px; white-space:nowrap;
+    background:#fff; color:#3a3a58; font-size:12.5px; font-weight:700;
+    padding:7px 12px; border-radius:14px 14px 14px 3px;
+    box-shadow:0 4px 14px rgba(90,80,200,.18);
+    animation:pop .4s cubic-bezier(.2,.8,.3,1.4);
+  }
+  @keyframes pop { from{ transform:scale(.5); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .copyright { color:#8fa8c8; font-size:11px; text-align:center; margin-top:14px; letter-spacing:.5px; font-weight:600; }
+  .hint { color:#a2a2be; font-size:11.5px; text-align:center; margin-top:24px; line-height:1.8; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">한번에 배우는 영어 프랑스어</div>
+    <div class="logoEn">Learn English &amp; French at Once</div>
+    <div class="logoFr">L'anglais et le français à la fois</div>
+    <p class="sub">문장을 입력하면 번역 · 한글 발음 · 원어민 음성까지</p>
+  </header>
+
+  <div class="searchBox">
+    <textarea id="input" placeholder="한글 문장을 입력하세요"></textarea>
+    <button class="goBtn" id="go">➤</button>
+  </div>
+
+  <div class="examples">
+    <button>안녕하세요</button>
+    <button>감사합니다</button>
+    <button>오늘 날씨가 좋네요</button>
+    <button>커피 한 잔 주세요</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div id="result" style="display:none">
+    <div class="block bko">
+      <div class="langTag"><span class="flagDot">🇰🇷</span><span class="langName">한국어</span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <div class="mainLine">
+        <div class="sentence ko" id="ko"></div>
+        <button class="speak" data-lang="ko">🔊</button>
+      </div>
+    </div>
+    <div class="block ben">
+      <div class="langTag"><span class="flagDot">🇺🇸</span><span class="langName">ENGLISH</span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <div class="mainLine">
+        <div class="sentence en" id="en"></div>
+        <button class="speak" data-lang="en">🔊</button>
+      </div>
+      <div class="pron" id="enPron"></div>
+    </div>
+    <div class="block bfr">
+      <div class="langTag"><span class="flagDot">🇫🇷</span><span class="langName">FRANÇAIS</span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <div class="mainLine">
+        <div class="sentence fr" id="fr"></div>
+        <button class="speak" data-lang="fr">🔊</button>
+      </div>
+      <div class="pron" id="frPron"></div>
+    </div>
+  </div>
+
+  
+  <div class="mascot" id="mascot">
+    <div class="bubble" id="bubble">봉주르! 🇫🇷</div>
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="185" rx="46" ry="9" fill="rgba(0,0,0,.08)"/>
+      <ellipse cx="100" cy="118" rx="52" ry="58" fill="#4fc47f"/>
+      <ellipse cx="100" cy="132" rx="34" ry="38" fill="#a8e6c1"/>
+      <circle cx="100" cy="74" r="42" fill="#4fc47f"/>
+      <path d="M96 62 q22 -4 20 14 q-2 12 -16 10 z" fill="#f5a623"/>
+      <path d="M100 76 q14 2 12 12 q-8 6 -14 -2 z" fill="#e08c00"/>
+      <circle cx="82" cy="66" r="12" fill="#fff"/><circle cx="84" cy="68" r="5.5" fill="#26263a"/>
+      <circle cx="86" cy="66" r="2" fill="#fff"/>
+      <path d="M58 52 q10 -26 42 -22 q-4 -10 -20 -8 q-26 4 -30 28 z" fill="#e84860"/>
+      <ellipse cx="76" cy="34" rx="26" ry="12" fill="#e84860" transform="rotate(-12 76 34)"/>
+      <circle cx="52" cy="40" r="6" fill="#c93350"/>
+      <path d="M52 120 q-18 10 -14 30 q14 2 22 -18" fill="#3aa967"/>
+      <path d="M148 120 q18 10 14 30 q-14 2 -22 -18" fill="#3aa967"/>
+      <path d="M88 172 l6 12 M112 172 l-6 12" stroke="#f5a623" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <p class="hint">🔊 를 누르면 원어민 음성이 재생됩니다<br>한글 발음 표기는 참고용 근사치입니다</p>
+  <p class="copyright">© 2026 KoEnFr. All rights reserved.</p>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let current = { ko: "", en: "", fr: "" };
+
+/* ===== 한글 조합 유틸 ===== */
+const CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+const JUNG = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ";
+const JONG = " ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ";
+function syl(cho, jung, jong) {
+  const c = CHO.indexOf(cho), j = JUNG.indexOf(jung), o = jong ? JONG.indexOf(jong) : 0;
+  if (c < 0 || j < 0) return "";
+  return String.fromCharCode(0xAC00 + (c * 21 + j) * 28 + (o < 0 ? 0 : o));
+}
+
+/* ===== 프랑스어 → 한글 발음 (원어민식: r=흐, p/t/c=된소리) ===== */
+function frWord(w) {
+  w = w.toLowerCase().replace(/[.,!?;:"«»""]/g, "");
+  if (!w) return "";
+  w = w.replace(/['’‘]/g, "'");
+  const DICT = {
+    "je":"즈","tu":"뛰","il":"일","elle":"엘","nous":"누","vous":"부","est":"에","et":"에",
+    "les":"레","des":"데","le":"르","la":"라","un":"앙","une":"윈","bonjour":"봉주흐",
+    "bonsoir":"봉수아흐","merci":"메흐시","oui":"위","non":"농","très":"트헤","beau":"보","belle":"벨",
+    "aujourd'hui":"오주흐뒤","aujourdhui":"오주흐뒤","c'est":"세","s'il":"실","sil":"실",
+    "est-ce":"에스","qu'il":"낄","j'ai":"줴","n'est":"네","d'accord":"다꼬흐",
+    "temps":"떵","fait":"페","beaucoup":"보꾸","café":"꺄페","plaît":"플레","plait":"플레",
+    "france":"프헝스","paris":"빠히","bien":"비앙","bon":"봉","au":"오","aux":"오","revoir":"흐부아흐",
+    "comment":"꼬멍","allez":"알레","ça":"싸","ca":"싸","va":"바","donnez":"도네","moi":"무아",
+    "tasse":"따스","de":"드","du":"뒤","pour":"뿌흐","avec":"아벡","jour":"주흐","jours":"주흐",
+    "madame":"마담","monsieur":"므슈","excusez":"엑스뀌제","pardon":"빠흐동","toi":"뚜아",
+    "amour":"아무흐","vie":"비","eau":"오","vin":"뱅","pain":"빵","fromage":"프호마주"
+  };
+  if (DICT[w] !== undefined) return DICT[w];
+  const w2 = w.replace(/'/g, "");
+  if (DICT[w2] !== undefined) return DICT[w2];
+  if (w.includes("'")) {
+    return frWord(w.replace(/^c'/, "s").replace(/^qu'/, "k").replace(/^[jldns]'/, m => m[0]).replace(/'/g, ""));
+  }
+  const VOW = "aeiouyàâéèêëîïôûù";
+  const V = { "eau":"ㅗ","au":"ㅗ","ou":"ㅜ","oi":"ㅘ","ai":"ㅔ","ei":"ㅔ","eu":"ㅓ","é":"ㅔ","è":"ㅔ","ê":"ㅔ","e":"ㅡ","a":"ㅏ","o":"ㅗ","i":"ㅣ","y":"ㅣ","u":"ㅟ","à":"ㅏ","â":"ㅏ","î":"ㅣ","ô":"ㅗ","û":"ㅟ" };
+  const PAL = { "ㅏ":"ㅑ","ㅗ":"ㅛ","ㅜ":"ㅠ","ㅓ":"ㅕ","ㅡ":"ㅠ" };
+  let out = "", i = 0;
+  function cons(s, next) {
+    if (s.startsWith("ch")) return ["ㅅ", 2, true];
+    if (s.startsWith("gn")) return ["ㄴ", 2, true];
+    if (s.startsWith("qu")) return ["ㄲ", 2, false];
+    if (s.startsWith("ph")) return ["ㅍ", 2, false];
+    if (s.startsWith("th")) return ["ㄸ", 2, false];
+    const c = s[0];
+    const M = { b:"ㅂ",c:"ㄲ",ç:"ㅆ",d:"ㄷ",f:"ㅍ",g:"ㄱ",h:"",j:"ㅈ",k:"ㄲ",l:"ㄹ",m:"ㅁ",n:"ㄴ",p:"ㅃ",r:"ㅎ",s:"ㅅ",t:"ㄸ",v:"ㅂ",w:"ㅇ",x:"ㄲ",z:"ㅈ" };
+    let h = M[c] ?? "";
+    if (c === "c" && "eiéè".includes(next)) h = "ㅆ";
+    if (c === "g" && "eiéè".includes(next)) h = "ㅈ";
+    return [h, 1, false];
+  }
+  function clen(s) {
+    for (const k of ["ch","gn","qu","ph","th"]) if (s.startsWith(k)) return 2;
+    return 1;
+  }
+  while (i < w.length) {
+    let cho = "ㅇ", pal = false;
+    const startCh = w[i];
+    if (!VOW.includes(startCh)) {
+      const L = clen(w.slice(i));
+      const [h, adv, p] = cons(w.slice(i), w[i + L] || "");
+      pal = p;
+      if (h === "" && adv === 1) { i += 1; continue; }
+      cho = h || "ㅇ"; i += adv;
+      if (i >= w.length || !VOW.includes(w[i])) {
+        if (i >= w.length) {
+          if ("stdxzpn".includes(startCh)) continue;        // 어말 묵음
+          if (startCh === "r") { out += "흐"; continue; }   // 어말 r → 흐
+        }
+        out += syl(cho, "ㅡ");
+        continue;
+      }
+    }
+    let matched = false;
+    for (const k of ["ain","ein","on","om","an","am","en","em","in","im","un","um","yn","ym"]) {
+      if (w.startsWith(k, i) && !VOW.includes(w[i + k.length] || "")) {
+        let jung = { on:"ㅗ",om:"ㅗ",an:"ㅓ",am:"ㅓ",en:"ㅓ",em:"ㅓ" }[k] || "ㅐ";
+        if (pal && (k === "an" || k === "am" || k === "en" || k === "em")) jung = "ㅑ";
+        else if (pal && PAL[jung]) jung = PAL[jung];
+        out += syl(cho, jung, "ㅇ"); i += k.length; matched = true; break;
+      }
+    }
+    if (matched) continue;
+    for (const k of ["eau","au","ou","oi","ai","ei","eu"]) {
+      if (w.startsWith(k, i)) {
+        let jung = V[k];
+        if (pal && PAL[jung]) jung = PAL[jung];
+        if (k === "oi") { out += syl(cho === "ㅇ" ? "ㅇ" : cho, "ㅜ") ? "" : ""; }
+        out += (k === "oi" && cho !== "ㅇ") ? syl(cho, "ㅜ") + "아" : syl(cho, jung);
+        i += k.length; matched = true; break;
+      }
+    }
+    if (matched) continue;
+    if (V[w[i]]) {
+      if (w[i] === "e" && i === w.length - 1 && out) { i++; continue; }
+      let jung = V[w[i]];
+      if (pal && PAL[jung]) jung = PAL[jung];
+      out += syl(cho, jung); i++;
+    } else { i++; }
+  }
+  return out || w;
+}
+function frToHangul(text) {
+  return text.split(/\s+/).map(frWord).filter(Boolean).join(" ");
+}
+
+/* ===== 영어 → 한글 발음 (원어민식: 플랩 t, 연음) ===== */
+const EN_DICT = {
+  "the":"더","a":"어","an":"언","i":"아이","you":"유","he":"히","she":"쉬","we":"위","they":"데이",
+  "it":"잇","is":"이즈","are":"아r","am":"앰","was":"워즈","be":"비","to":"투","of":"어브","in":"인",
+  "and":"앤","hello":"헬로우","hi":"하이","thank":"땡크","thanks":"땡스","please":"플리즈",
+  "good":"굿","morning":"모어닝","night":"나잇","today":"투데이","weather":"웨더r","nice":"나이스",
+  "very":"베리","beautiful":"뷰리풀","coffee":"커피","one":"원","cup":"컵","give":"깁",
+  "me":"미","have":"해브","day":"데이","love":"러브","like":"라익","want":"원트","water":"워러",
+  "food":"푸드","time":"타임","what":"웟","where":"웨어r","when":"웬","how":"하우","much":"머치",
+  "this":"디스","that":"댓","yes":"예스","no":"노우","sorry":"쏘리","excuse":"익스큐즈",
+  "friend":"프렌드","happy":"해피","really":"륄리","so":"쏘우","great":"그뤠잇","fine":"파인",
+  "my":"마이","your":"유어r","his":"히즈","her":"허r","our":"아워r","better":"베러","little":"리를",
+  "got":"갓","get":"겟","going":"고잉","let":"렛","letter":"레러","matter":"매러","pretty":"프리리",
+  "see":"씨","meet":"밋","later":"레이러","again":"어겐","here":"히어r","there":"데어r"
+};
+const EN_PHRASE = [
+  ["땡크 유", "땡큐"], ["깁 미", "김미"], ["원트 투", "워너"], ["고잉 투", "거너"],
+  ["갓 잇", "가릿"], ["렛 잇", "레릿"], ["체크 잇", "체키릿"], ["아웃 어브", "아우러브"],
+  ["낫 앳 올", "나래롤"], ["미 투", "미투"]
+];
+function enWord(w) {
+  const raw = w.toLowerCase().replace(/[.,!?;:"""'']/g, "");
+  if (!raw) return "";
+  if (EN_DICT[raw]) return EN_DICT[raw];
+  let s = raw, out = "", i = 0;
+  const RULES = [
+    ["tion","션"],["sion","전"],["ough","어프"],["eigh","에이"],["igh","아이"],
+    ["sh","쉬"],["ch","치"],["th","드"],["ph","프"],["wh","우"],["ck","크"],
+    ["ee","이"],["ea","이"],["oo","우"],["ou","아우"],["ow","오우"],["ay","에이"],
+    ["ai","에이"],["oa","오우"],["oi","오이"],["oy","오이"],["au","오"],["aw","오"],
+    ["qu","쿠"],["a","애"],["e","에"],["i","이"],["o","오"],["u","어"],["y","이"],
+    ["b","브"],["c","크"],["d","드"],["f","프"],["g","그"],["h","흐"],["j","즈"],
+    ["k","크"],["l","르"],["m","므"],["n","느"],["p","프"],["r","r"],["s","스"],
+    ["t","트"],["v","브"],["w","우"],["x","크스"],["z","즈"]
+  ];
+  if (s.length > 2 && s.endsWith("e") && !"aeiou".includes(s[s.length - 2])) s = s.slice(0, -1);
+  while (i < s.length) {
+    let hit = false;
+    for (const [k, v] of RULES) {
+      if (s.startsWith(k, i)) { out += v; i += k.length; hit = true; break; }
+    }
+    if (!hit) i++;
+  }
+  return out || raw;
+}
+function enToHangul(text) {
+  let r = text.split(/\s+/).map(enWord).filter(Boolean).join(" ");
+  for (const [a, b] of EN_PHRASE) r = r.split(a).join(b);
+  return r;
+}
+
+/* ===== 번역 ===== */
+function parseGtx(j) { return (j[0] || []).map(s => s[0]).join(""); }
+async function translate(text, target) {
+  const gtxUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="
+    + target + "&dt=t&q=" + encodeURIComponent(text);
+  // 1) 구글 직접
+  try {
+    const r = await fetch(gtxUrl);
+    if (r.ok) { const out = parseGtx(await r.json()); if (out.trim()) return out; }
+  } catch (e) {}
+  // 2) 구글 (CORS 프록시 경유)
+  try {
+    const r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(gtxUrl));
+    if (r.ok) { const out = parseGtx(await r.json()); if (out.trim()) return out; }
+  } catch (e) {}
+  // 3) MyMemory
+  try {
+    const r = await fetch("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text)
+      + "&langpair=" + encodeURIComponent("ko|" + target));
+    const j = await r.json();
+    const out = j?.responseData?.translatedText;
+    if (out) return out;
+  } catch (e) {}
+  throw new Error("번역 서버에 연결할 수 없어요 — 인터넷 연결을 확인해 주세요");
+}
+
+/* ===== 원어민 음성 ===== */
+let voices = [];
+function loadVoices() { voices = speechSynthesis.getVoices(); }
+loadVoices();
+speechSynthesis.onvoiceschanged = loadVoices;
+function pickVoice(lang) {
+  const want = { ko: "ko", en: "en-us", fr: "fr" }[lang];
+  const pool = voices.filter(v => v.lang.replace("_","-").toLowerCase().startsWith(want.slice(0,2)));
+  return pool.find(v => /natural/i.test(v.name) && v.lang.toLowerCase().startsWith(want))
+      || pool.find(v => /natural|online/i.test(v.name))
+      || pool.find(v => /google/i.test(v.name)) || pool[0] || null;
+}
+function speak(lang, btn) {
+  const text = current[lang];
+  if (!text) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = { ko: "ko-KR", en: "en-US", fr: "fr-FR" }[lang];
+  const v = pickVoice(lang);
+  if (v) u.voice = v;
+  u.rate = 0.92;
+  const blk = btn ? btn.closest(".block") : null;
+  if (btn) {
+    btn.classList.add("playing");
+    if (blk) blk.classList.add("playing");
+    u.onend = u.onerror = () => { btn.classList.remove("playing"); if (blk) blk.classList.remove("playing"); };
+  }
+  speechSynthesis.speak(u);
+  const bb = document.getElementById("bubble");
+  if (bb) bb.textContent = { ko: "한국어 발음이에요 🇰🇷", en: "영어 발음이에요 🇺🇸", fr: "프랑스어 발음이에요 🇫🇷" }[lang];
+}
+
+/* ===== 메인 ===== */
+async function run() {
+  const ko = $("input").value.trim();
+  if (!ko) return;
+  $("go").disabled = true;
+  $("status").textContent = "번역 중...";
+  try {
+    const [en, fr] = await Promise.all([translate(ko, "en"), translate(ko, "fr")]);
+    current = { ko, en, fr };
+    $("ko").textContent = ko;
+    $("en").textContent = en;
+    $("fr").textContent = fr;
+    $("enPron").textContent = enToHangul(en);
+    $("frPron").textContent = frToHangul(fr);
+    $("result").style.display = "block";
+    $("status").textContent = "";
+    speak("en");
+  } catch (e) {
+    $("status").textContent = "오류: " + (e.message || e);
+  } finally {
+    $("go").disabled = false;
+  }
+}
+$("go").addEventListener("click", run);
+$("input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); run(); }
+});
+document.querySelectorAll(".speak").forEach(b =>
+  b.addEventListener("click", () => speak(b.dataset.lang, b))
+);
+document.querySelectorAll(".examples button").forEach(b =>
+  b.addEventListener("click", () => { $("input").value = b.textContent; run(); })
+);
+
+/* URL에 ?q=문장 이 있으면 자동 번역 (X 공유용) */
+const urlQ = new URLSearchParams(location.search).get("q");
+if (urlQ) { $("input").value = urlQ; run(); }
+
+/* 파를레 말풍선 */
+const GREET = ["봉주르! 🇫🇷", "Hello! 🇺🇸", "안녕하세요! 🇰🇷", "같이 연습해요 🎧", "Merci! 감사합니다", "따라 말해보세요 🗣"];
+let gi = 0;
+setInterval(() => {
+  gi = (gi + 1) % GREET.length;
+  const b = document.getElementById("bubble");
+  b.style.animation = "none"; void b.offsetWidth;
+  b.textContent = GREET[gi];
+  b.style.animation = "";
+}, 4000);
+</script>
+</body>
+</html>
