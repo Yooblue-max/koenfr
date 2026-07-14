@@ -40,7 +40,9 @@
   }
   .logoEn { margin-top:6px; font-size:14px; font-weight:700; color:#3a7fc4; letter-spacing:.3px; }
   .logoFr { margin-top:3px; font-size:13px; font-weight:700; color:#7a68c8; letter-spacing:.3px; font-style:italic; }
-  .sub { color:#7a7a96; font-size:13px; margin-top:8px; letter-spacing:.2px; }
+  .subEn { color:#8fa3c0; font-size:11.5px; }
+  .subFr { color:#9a8fc4; font-size:11.5px; font-style:italic; }
+  .sub { color:#7a7a96; font-size:13px; margin:2px 0 16px; text-align:center; letter-spacing:.2px; line-height:1.8; }
   .searchBox {
     position:relative; margin-bottom:14px;
     border-radius:22px; background:rgba(255,255,255,.8);
@@ -143,6 +145,8 @@
     <button class="goBtn" id="go">➤</button>
   </div>
 
+  
+
   <div class="examples">
     <button>안녕하세요</button>
     <button>감사합니다</button>
@@ -182,7 +186,7 @@
 
   
   <div class="mascot" id="mascot">
-    <div class="bubble" id="bubble">봉주르! 🇫🇷</div>
+    <div class="bubble" id="bubble">봉주흐! 🇫🇷</div>
     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="100" cy="185" rx="46" ry="9" fill="rgba(0,0,0,.08)"/>
       <ellipse cx="100" cy="118" rx="52" ry="58" fill="#4fc47f"/>
@@ -201,6 +205,7 @@
     </svg>
   </div>
 
+  
   <p class="hint">🔊 를 누르면 원어민 음성이 재생됩니다<br>한글 발음 표기는 참고용 근사치입니다</p>
   <p class="copyright">© 2026 KoEnFr. All rights reserved.</p>
 
@@ -480,7 +485,7 @@ const urlQ = new URLSearchParams(location.search).get("q");
 if (urlQ) { $("input").value = urlQ; run(); }
 
 /* 파를레 말풍선 */
-const GREET = ["봉주르! 🇫🇷", "Hello! 🇺🇸", "안녕하세요! 🇰🇷", "같이 연습해요 🎧", "Merci! 감사합니다", "따라 말해보세요 🗣"];
+const GREET = ["봉주흐! 🇫🇷", "헬로우! 🇺🇸", "안녕하세요! 🇰🇷", "같이 연습해요 🎧", "메흐시! 감사합니다", "따라 말해보세요 🗣"];
 let gi = 0;
 setInterval(() => {
   gi = (gi + 1) % GREET.length;
