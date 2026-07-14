@@ -135,11 +135,11 @@
     <div class="logo">한번에 배우는 영어 프랑스어</div>
     <div class="logoEn">Learn English &amp; French at Once</div>
     <div class="logoFr">L'anglais et le français à la fois</div>
-    <p class="sub">문장을 입력하면 번역 · 한글 발음 · 원어민 음성까지</p>
+    <p class="sub">한국어·영어·프랑스어 어느 쪽이든 입력하면 나머지로 번역됩니다</p>
   </header>
 
   <div class="searchBox">
-    <textarea id="input" placeholder="한글 문장을 입력하세요"></textarea>
+    <textarea id="input" placeholder="한글·영어·프랑스어 아무거나 입력하세요"></textarea>
     <button class="goBtn" id="go">➤</button>
   </div>
 
@@ -148,6 +148,8 @@
     <button>감사합니다</button>
     <button>오늘 날씨가 좋네요</button>
     <button>커피 한 잔 주세요</button>
+    <button>Good morning</button>
+    <button>Bonjour</button>
   </div>
 
   <div class="status" id="status"></div>
@@ -365,25 +367,38 @@ function enToHangul(text) {
 
 /* ===== 번역 ===== */
 function parseGtx(j) { return (j[0] || []).map(s => s[0]).join(""); }
-async function translate(text, target) {
-  const gtxUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl="
-    + target + "&dt=t&q=" + encodeURIComponent(text);
-  // 1) 구글 직접
+async function gtxFetch(url) {
   try {
-    const r = await fetch(gtxUrl);
-    if (r.ok) { const out = parseGtx(await r.json()); if (out.trim()) return out; }
+    const r = await fetch(url);
+    if (r.ok) return await r.json();
   } catch (e) {}
-  // 2) 구글 (CORS 프록시 경유)
   try {
-    const r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(gtxUrl));
-    if (r.ok) { const out = parseGtx(await r.json()); if (out.trim()) return out; }
+    const r = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(url));
+    if (r.ok) return await r.json();
   } catch (e) {}
-  // 3) MyMemory
+  return null;
+}
+async function detectLang(text) {
+  if (/[가-힣]/.test(text)) return "ko";
+  const j = await gtxFetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=" + encodeURIComponent(text));
+  if (j && typeof j[2] === "string") {
+    const d = j[2].slice(0, 2);
+    if (d === "ko" || d === "en" || d === "fr") return d;
+  }
+  if (/[àâçéèêëîïôûùœ]/i.test(text)) return "fr";
+  const frWords = /\b(le|la|les|je|tu|il|elle|est|et|un|une|des|bonjour|merci|vous|nous|pas|c'est)\b/i;
+  return frWords.test(text) ? "fr" : "en";
+}
+async function translate(text, sl, tl) {
+  const gtxUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sl + "&tl="
+    + tl + "&dt=t&q=" + encodeURIComponent(text);
+  const j = await gtxFetch(gtxUrl);
+  if (j) { const out = parseGtx(j); if (out.trim()) return out; }
   try {
     const r = await fetch("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text)
-      + "&langpair=" + encodeURIComponent("ko|" + target));
-    const j = await r.json();
-    const out = j?.responseData?.translatedText;
+      + "&langpair=" + encodeURIComponent(sl + "|" + tl));
+    const jj = await r.json();
+    const out = jj?.responseData?.translatedText;
     if (out) return out;
   } catch (e) {}
   throw new Error("번역 서버에 연결할 수 없어요 — 인터넷 연결을 확인해 주세요");
@@ -423,27 +438,32 @@ function speak(lang, btn) {
 
 /* ===== 메인 ===== */
 async function run() {
-  const ko = $("input").value.trim();
-  if (!ko) return;
+  const text = $("input").value.trim();
+  if (!text) return;
   $("go").disabled = true;
   $("status").textContent = "번역 중...";
   try {
-    const [en, fr] = await Promise.all([translate(ko, "en"), translate(ko, "fr")]);
-    current = { ko, en, fr };
-    $("ko").textContent = ko;
-    $("en").textContent = en;
-    $("fr").textContent = fr;
-    $("enPron").textContent = enToHangul(en);
-    $("frPron").textContent = frToHangul(fr);
+    const src = await detectLang(text);
+    const targets = ["ko", "en", "fr"].filter(l => l !== src);
+    const [t1, t2] = await Promise.all(targets.map(l => translate(text, src, l)));
+    const res = {};
+    res[src] = text; res[targets[0]] = t1; res[targets[1]] = t2;
+    current = res;
+    $("ko").textContent = res.ko;
+    $("en").textContent = res.en;
+    $("fr").textContent = res.fr;
+    $("enPron").textContent = enToHangul(res.en);
+    $("frPron").textContent = frToHangul(res.fr);
     $("result").style.display = "block";
     $("status").textContent = "";
-    speak("en");
+    speak(src === "en" ? "fr" : "en");
   } catch (e) {
     $("status").textContent = "오류: " + (e.message || e);
   } finally {
     $("go").disabled = false;
   }
 }
+
 $("go").addEventListener("click", run);
 $("input").addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); run(); }
