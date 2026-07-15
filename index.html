@@ -393,19 +393,37 @@ async function detectLang(text) {
   const frWords = /\b(le|la|les|je|tu|il|elle|est|et|un|une|des|bonjour|merci|vous|nous|pas|c'est)\b/i;
   return frWords.test(text) ? "fr" : "en";
 }
+function looksValid(out, text, tl) {
+  if (!out || !out.trim()) return false;
+  if (tl === "ko") return /[가-힣]/.test(out);
+  if (!/[a-zA-Zà-ÿÀ-Ÿ]/.test(out)) return false;
+  return out.trim().toLowerCase() !== text.trim().toLowerCase();
+}
 async function translate(text, sl, tl) {
   const gtxUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sl + "&tl="
     + tl + "&dt=t&q=" + encodeURIComponent(text);
-  const j = await gtxFetch(gtxUrl);
-  if (j) { const out = parseGtx(j); if (out.trim()) return out; }
+  // 1) 구글 직접
+  const j1 = await gtxFetch(gtxUrl);
+  if (j1) { const out = parseGtx(j1); if (looksValid(out, text, tl)) return out; }
+  // 2) 구글 (다른 프록시 경유)
+  try {
+    const r = await fetch("https://corsproxy.io/?url=" + encodeURIComponent(gtxUrl));
+    if (r.ok) { const out = parseGtx(await r.json()); if (looksValid(out, text, tl)) return out; }
+  } catch (e) {}
+  // 3) Lingva (구글 번역 미러)
+  try {
+    const r = await fetch("https://lingva.ml/api/v1/" + sl + "/" + tl + "/" + encodeURIComponent(text));
+    if (r.ok) { const j = await r.json(); const out = j?.translation; if (looksValid(out, text, tl)) return out; }
+  } catch (e) {}
+  // 4) MyMemory (검증 통과 시에만)
   try {
     const r = await fetch("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text)
       + "&langpair=" + encodeURIComponent(sl + "|" + tl));
     const jj = await r.json();
     const out = jj?.responseData?.translatedText;
-    if (out) return out;
+    if (looksValid(out, text, tl)) return out;
   } catch (e) {}
-  throw new Error("번역 서버에 연결할 수 없어요 — 인터넷 연결을 확인해 주세요");
+  throw new Error("번역 서버에 연결할 수 없어요 — 잠시 후 다시 시도해 주세요");
 }
 
 /* ===== 원어민 음성 ===== */
