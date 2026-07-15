@@ -167,7 +167,7 @@
       </div>
     </div>
     <div class="block ben">
-      <div class="langTag"><span class="flagDot">🇺🇸</span><span class="langName">ENGLISH</span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <div class="langTag"><span class="flagDot">🇬🇧</span><span class="langName">ENGLISH</span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
       <div class="mainLine">
         <div class="sentence en" id="en"></div>
         <button class="speak" data-lang="en">🔊</button>
@@ -322,22 +322,20 @@ function frToHangul(text) {
 /* ===== 영어 → 한글 발음 (원어민식: 플랩 t, 연음) ===== */
 const EN_DICT = {
   "the":"더","a":"어","an":"언","i":"아이","you":"유","he":"히","she":"쉬","we":"위","they":"데이",
-  "it":"잇","is":"이즈","are":"아r","am":"앰","was":"워즈","be":"비","to":"투","of":"어브","in":"인",
+  "it":"잇","is":"이즈","are":"아","am":"앰","was":"워즈","be":"비","to":"투","of":"어브","in":"인",
   "and":"앤","hello":"헬로우","hi":"하이","thank":"땡크","thanks":"땡스","please":"플리즈",
-  "good":"굿","morning":"모어닝","night":"나잇","today":"투데이","weather":"웨더r","nice":"나이스",
-  "very":"베리","beautiful":"뷰리풀","coffee":"커피","one":"원","cup":"컵","give":"깁",
-  "me":"미","have":"해브","day":"데이","love":"러브","like":"라익","want":"원트","water":"워러",
-  "food":"푸드","time":"타임","what":"웟","where":"웨어r","when":"웬","how":"하우","much":"머치",
+  "good":"굿","morning":"모어닝","night":"나잇","today":"투데이","weather":"웨더","nice":"나이스",
+  "very":"베리","beautiful":"뷰티풀","coffee":"커피","one":"원","cup":"컵","give":"기브",
+  "me":"미","have":"해브","day":"데이","love":"러브","like":"라익","want":"원트","water":"워터",
+  "food":"푸드","time":"타임","what":"웟","where":"웨어","when":"웬","how":"하우","much":"머치",
   "this":"디스","that":"댓","yes":"예스","no":"노우","sorry":"쏘리","excuse":"익스큐즈",
-  "friend":"프렌드","happy":"해피","really":"륄리","so":"쏘우","great":"그뤠잇","fine":"파인",
-  "my":"마이","your":"유어r","his":"히즈","her":"허r","our":"아워r","better":"베러","little":"리를",
-  "got":"갓","get":"겟","going":"고잉","let":"렛","letter":"레러","matter":"매러","pretty":"프리리",
-  "see":"씨","meet":"밋","later":"레이러","again":"어겐","here":"히어r","there":"데어r"
+  "friend":"프렌드","happy":"해피","really":"리얼리","so":"쏘우","great":"그레이트","fine":"파인",
+  "my":"마이","your":"유어","his":"히즈","her":"허","our":"아워","better":"베터","little":"리틀",
+  "got":"갓","get":"겟","going":"고잉","let":"렛","letter":"레터","matter":"매터","pretty":"프리티",
+  "see":"씨","meet":"밋","later":"레이터","again":"어겐","here":"히어","there":"데어"
 };
 const EN_PHRASE = [
-  ["땡크 유", "땡큐"], ["깁 미", "김미"], ["원트 투", "워너"], ["고잉 투", "거너"],
-  ["갓 잇", "가릿"], ["렛 잇", "레릿"], ["체크 잇", "체키릿"], ["아웃 어브", "아우러브"],
-  ["낫 앳 올", "나래롤"], ["미 투", "미투"]
+  ["땡크 유", "땡큐"], ["미 투", "미투"]
 ];
 function enWord(w) {
   const raw = w.toLowerCase().replace(/[.,!?;:"""'']/g, "");
@@ -415,7 +413,7 @@ function loadVoices() { voices = speechSynthesis.getVoices(); }
 loadVoices();
 speechSynthesis.onvoiceschanged = loadVoices;
 function pickVoice(lang) {
-  const want = { ko: "ko", en: "en-us", fr: "fr" }[lang];
+  const want = { ko: "ko", en: "en-gb", fr: "fr" }[lang];
   const pool = voices.filter(v => v.lang.replace("_","-").toLowerCase().startsWith(want.slice(0,2)));
   return pool.find(v => /natural/i.test(v.name) && v.lang.toLowerCase().startsWith(want))
       || pool.find(v => /natural|online/i.test(v.name))
@@ -426,7 +424,7 @@ function speak(lang, btn) {
   if (!text) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = { ko: "ko-KR", en: "en-US", fr: "fr-FR" }[lang];
+  u.lang = { ko: "ko-KR", en: "en-GB", fr: "fr-FR" }[lang];
   const v = pickVoice(lang);
   if (v) u.voice = v;
   u.rate = 0.92;
@@ -438,7 +436,7 @@ function speak(lang, btn) {
   }
   speechSynthesis.speak(u);
   const bb = document.getElementById("bubble");
-  if (bb) bb.textContent = { ko: "한국어 발음이에요 🇰🇷", en: "영어 발음이에요 🇺🇸", fr: "프랑스어 발음이에요 🇫🇷" }[lang];
+  if (bb) bb.textContent = { ko: "한국어 발음이에요 🇰🇷", en: "영어 발음이에요 🇬🇧", fr: "프랑스어 발음이에요 🇫🇷" }[lang];
 }
 
 /* ===== 메인 ===== */
@@ -485,7 +483,7 @@ const urlQ = new URLSearchParams(location.search).get("q");
 if (urlQ) { $("input").value = urlQ; run(); }
 
 /* 파를레 말풍선 */
-const GREET = ["봉주흐! 🇫🇷", "헬로우! 🇺🇸", "안녕하세요! 🇰🇷", "같이 연습해요 🎧", "메흐시! 감사합니다", "따라 말해보세요 🗣"];
+const GREET = ["봉주흐! 🇫🇷", "헬로우! 🇬🇧", "안녕하세요! 🇰🇷", "같이 연습해요 🎧", "메흐시! 감사합니다", "따라 말해보세요 🗣"];
 let gi = 0;
 setInterval(() => {
   gi = (gi + 1) % GREET.length;
