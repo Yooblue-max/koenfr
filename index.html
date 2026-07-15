@@ -412,31 +412,52 @@ let voices = [];
 function loadVoices() { voices = speechSynthesis.getVoices(); }
 loadVoices();
 speechSynthesis.onvoiceschanged = loadVoices;
-function pickVoice(lang) {
-  const want = { ko: "ko", en: "en-gb", fr: "fr" }[lang];
-  const pool = voices.filter(v => v.lang.replace("_","-").toLowerCase().startsWith(want.slice(0,2)));
-  return pool.find(v => /natural/i.test(v.name) && v.lang.toLowerCase().startsWith(want))
-      || pool.find(v => /natural|online/i.test(v.name))
-      || pool.find(v => /google/i.test(v.name)) || pool[0] || null;
+function voiceCandidates(lang) {
+  const want = { ko: "ko-kr", en: "en-gb", fr: "fr" }[lang];
+  const norm = v => v.lang.replace("_", "-").toLowerCase();
+  const pool = voices.filter(v => norm(v).startsWith(want.slice(0, 2)));
+  const exact = pool.filter(v => norm(v).startsWith(want));
+  const list = [];
+  const add = v => { if (v && !list.includes(v)) list.push(v); };
+  add(exact.find(v => /natural/i.test(v.name)));
+  add(exact.find(v => !/natural/i.test(v.name)));
+  add(pool.find(v => /natural|online/i.test(v.name)));
+  add(pool.find(v => /google/i.test(v.name)));
+  add(pool[0]);
+  list.push(null); // 마지막: 브라우저 기본 음성
+  return list;
 }
+
 function speak(lang, btn) {
   const text = current[lang];
   if (!text) return;
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = { ko: "ko-KR", en: "en-GB", fr: "fr-FR" }[lang];
-  const v = pickVoice(lang);
-  if (v) u.voice = v;
-  u.rate = 0.92;
-  const blk = btn ? btn.closest(".block") : null;
-  if (btn) {
-    btn.classList.add("playing");
-    if (blk) blk.classList.add("playing");
-    u.onend = u.onerror = () => { btn.classList.remove("playing"); if (blk) blk.classList.remove("playing"); };
-  }
-  speechSynthesis.speak(u);
   const bb = document.getElementById("bubble");
   if (bb) bb.textContent = { ko: "한국어 발음이에요 🇰🇷", en: "영어 발음이에요 🇬🇧", fr: "프랑스어 발음이에요 🇫🇷" }[lang];
+  const blk = btn ? btn.closest(".block") : null;
+  const uiOn = () => { if (btn) { btn.classList.add("playing"); if (blk) blk.classList.add("playing"); } };
+  const uiOff = () => { if (btn) { btn.classList.remove("playing"); if (blk) blk.classList.remove("playing"); } };
+  const cands = voiceCandidates(lang);
+
+  function attempt(idx) {
+    if (idx >= cands.length) { uiOff(); $("status").textContent = "이 기기에서 음성을 재생하지 못했어요"; return; }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = { ko: "ko-KR", en: "en-GB", fr: "fr-FR" }[lang];
+    if (cands[idx]) u.voice = cands[idx];
+    u.rate = 0.92;
+    let started = false;
+    const watchdog = setTimeout(() => {
+      if (!started) { speechSynthesis.cancel(); attempt(idx + 1); }
+    }, 2500);
+    u.onstart = () => { started = true; clearTimeout(watchdog); uiOn(); };
+    u.onend = () => { clearTimeout(watchdog); uiOff(); };
+    u.onerror = () => {
+      clearTimeout(watchdog); uiOff();
+      if (!started) attempt(idx + 1);
+    };
+    speechSynthesis.speak(u);
+  }
+  attempt(0);
 }
 
 /* ===== 메인 ===== */
