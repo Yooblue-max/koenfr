@@ -492,6 +492,17 @@ function speak(lang, btn) {
 }
 
 /* ===== 메인 ===== */
+function showResult(res) {
+  current = res;
+  $("ko").textContent = res.ko;
+  $("en").textContent = res.en;
+  $("fr").textContent = res.fr;
+  $("enPron").textContent = enToHangul(res.en);
+  $("frPron").textContent = frToHangul(res.fr);
+  $("result").style.display = "block";
+  $("status").textContent = "";
+}
+
 async function run() {
   const text = $("input").value.trim();
   if (!text) return;
@@ -503,14 +514,7 @@ async function run() {
     const [t1, t2] = await Promise.all(targets.map(l => translate(text, src, l)));
     const res = {};
     res[src] = text; res[targets[0]] = t1; res[targets[1]] = t2;
-    current = res;
-    $("ko").textContent = res.ko;
-    $("en").textContent = res.en;
-    $("fr").textContent = res.fr;
-    $("enPron").textContent = enToHangul(res.en);
-    $("frPron").textContent = frToHangul(res.fr);
-    $("result").style.display = "block";
-    $("status").textContent = "";
+    showResult(res);
     speak(src === "en" ? "fr" : "en");
   } catch (e) {
     $("status").textContent = "오류: " + (e.message || e);
@@ -530,9 +534,15 @@ document.querySelectorAll(".examples button").forEach(b =>
   b.addEventListener("click", () => { $("input").value = b.textContent; run(); })
 );
 
-/* URL에 ?q=문장 이 있으면 자동 번역 (X 공유용) */
-const urlQ = new URLSearchParams(location.search).get("q");
-if (urlQ) { $("input").value = urlQ; run(); }
+/* URL 공유 (X용): ?ko=..&en=..&fr=.. 이면 그대로 표시, ?q=문장 이면 자동 번역 */
+const urlP = new URLSearchParams(location.search);
+if (urlP.get("ko") && urlP.get("en") && urlP.get("fr")) {
+  $("input").value = urlP.get("ko");
+  showResult({ ko: urlP.get("ko"), en: urlP.get("en"), fr: urlP.get("fr") });
+} else if (urlP.get("q")) {
+  $("input").value = urlP.get("q");
+  run();
+}
 
 /* 파를레 말풍선 */
 const GREET = ["봉주흐! 🇫🇷", "헬로우! 🇺🇸", "안녕하세요! 🇰🇷", "같이 연습해요 🎧", "메흐시! 감사합니다", "따라 말해보세요 🗣"];
